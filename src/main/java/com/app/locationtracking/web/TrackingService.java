@@ -15,14 +15,16 @@ public class TrackingService {
 	TrackingRepository trackingRepository;
 	
 	
-	  public void loadDataAsset(TrackingInfo trackingInfo) {
-		  trackingRepository.save(trackingInfo);
+	  public String loadDataAsset(TrackingInfo trackingInfo) {
+		 TrackingInfo ti = trackingRepository.save(trackingInfo);
+		 return ""+ti.getSno();
 	    }
 	    
 	    
 	    
-	    public void loadDataMobile(TrackingInfo trackingInfo) {
-	    	trackingRepository.save(trackingInfo);
+	    public String loadDataMobile(TrackingInfo trackingInfo) {
+	    	 TrackingInfo ti = 	trackingRepository.save(trackingInfo);
+	    	 return ""+ti.getSno();
 	    }
     
 	    public List<Object[]> getAssetCalls(String id,String trackingType,Date stDt, Date endDt) {

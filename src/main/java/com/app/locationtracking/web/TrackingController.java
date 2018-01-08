@@ -25,16 +25,16 @@ public class TrackingController {
 	TrackingService trackingService;
 	
     @PostMapping(path="/asset",consumes=MediaType.APPLICATION_JSON_VALUE)
-    public void loadDataAsset(@RequestBody TrackingInfo trackingInfo) {
+    public String loadDataAsset(@RequestBody TrackingInfo trackingInfo) {
     	trackingInfo.setDeviceType(DeviceType.GPS_DEVICE.getDeviceType());
-    	trackingService.loadDataAsset(trackingInfo);
+    	return trackingService.loadDataAsset(trackingInfo);
     }
     
     
     @PostMapping(path="/mobile",consumes=MediaType.APPLICATION_JSON_VALUE)
-    public void loadDataMobile(@RequestBody TrackingInfo trackingInfo) {
+    public String loadDataMobile(@RequestBody TrackingInfo trackingInfo) {
      	trackingInfo.setDeviceType(DeviceType.MOBILE.getDeviceType());
-    	trackingService.loadDataMobile(trackingInfo);
+     	return trackingService.loadDataMobile(trackingInfo);
     }
 
 	@GetMapping(path="/getcalls/asset/{id}/{stDt}/{endDt}")
