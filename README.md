@@ -25,61 +25,49 @@ mvn clean install && java -jar target/TurvoReceiver-0.0.1-SNAPSHOT.jar
 GPS Device or Mobile App is capable of sending current location and speed of vehicle by invoking a rest API. Devices are capable of sending location lat long with configurable frequency of pings. Devices are authenticated with the App
 
 
-<h3>Class Diagram:</h3>
-
-
-
-
-<br>
-This Image Also Available in project
 <br>
 <h3>Rest API's :</h3>
 <ol>
-<li>URL: /track/asset <br>
+<li>URL: /tracker/startTrip <br>
 Method : POST <br>
 Response : {string} identified as Id <br>
 Request Body : <br>
 {<br>
-  "vehicle":{"vehicleId":String},<br>
-	"driver":{"driverId":int,"driverMobileNo":long},<br>
-	"latitude":double,<br>
-	"longitude":double,<br>
-	"currLocation":String,<br>
-	"speed":double,<br>
-	"currDateTime":Java.Util.Date,<br>
-	"additionalInfo":String<br>
+ "vehicleId":String,<br>
+ "driverId":String<br>
 }<br>
 
-Receives the data sent by IOT Device and stores it into Database. 
+
+Maps Vehicle id with Driver Id and Starts a new trip with 'Trip Id'.
 </li>
 
-<li>URL: /track/mobile <br>
+<li>URL: /tracker/trackingInfo <br>
 Method : POST <br>
-Response : {string} identified as Id <br>
+Response : {string} Success / Failure <br>
 Request Body : <br>
 {<br>
-  "vehicle":{"vehicleId":String},<br>
-	"driver":{"driverId":int,"driverMobileNo":long},<br>
+	"deviceType":String,	<br>
+	"id":String,<br>
 	"latitude":double,<br>
 	"longitude":double,<br>
-	"currLocation":String,<br>
 	"speed":double,<br>
-	"currDateTime":Java.Util.Date,<br>
+	"currDateTime":Java.util.Date,<br>
 	"additionalInfo":String<br>
 }<br>
 
-Receives the data sent by Mobile Number and stores it into Database. 
+Receives the data sent by IOT Device / Mobile Number / any other Device and stores it into Database. 
 </li>
-<li>URL: /getcalls/asset/{vehicleId}/{FromDate(YYYYMMDD)}/{ToDate(YYYYMMDD)}<br>
+<li>URL: /tracker/getAssets/{Id}/{FromDate(YYYYMMDD)}/{ToDate(YYYYMMDD)}<br>
 Method : GET <br>
-Response : Consolidated view of Number of pings from a given device within a given date range. <br>
-Example Response : [["2018-01-03",2],["2018-01-05",3]]<br>
+Response : Consolidated view of pings from a given device within a given date range. <br>
+
 </li>
 <br>
-<li>URL: /getcalls/mobile/{mobileNo}/{FromDate(YYYYMMDD)}/{ToDate(YYYYMMDD)}<br>
-Method : GET <br>
-Response : Consolidated view of Number of pings from a given mobile number within a given date range. <br>
-Example Response : [["2018-01-04",2],["2018-01-05",3]]<br>
+<li>URL: /tracker/endTrip/{TripId}<br>
+Method : PUT <br>
+Response : {string} Success / Failure <br>
+
+Updates the trip status as Ended for a given TripId and captured the end time.<br> 
 </li>
 
 </ol>
