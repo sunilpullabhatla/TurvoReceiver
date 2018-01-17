@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DataReceiverServiceApplication {
+public class TurvoReceiverApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DataReceiverServiceApplication.class, args);
+		SpringApplication.run(TurvoReceiverApplication.class, args);
 	}
 }

@@ -1,32 +1,28 @@
 package com.app.locationtracking.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+
+
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "driver")
+@Document(collection = "driver")
 public class Driver {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int driverId;
+    private String driverId;
     private String driverName;
-    
-    @Column(unique = true)
+    @NotNull
+    @Length(min=10,max=10,message="Mobile Number Shoud Contain 10 digits")
 	private long driverMobileNo;
 
-	public int getDriverId() {
+	public String getDriverId() {
 		return driverId;
 	}
 
-	public void setDriverId(int driverId) {
+	public void setDriverId(String driverId) {
 		this.driverId = driverId;
 	}
 

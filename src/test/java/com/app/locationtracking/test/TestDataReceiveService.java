@@ -2,6 +2,7 @@ package com.app.locationtracking.test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Random;
@@ -19,7 +20,7 @@ import com.app.locationtracking.entity.Vehicle;
 
 
 
-public class TestDataReceiveService extends DataReceiverServiceApplicationTests {
+public class TestDataReceiveService extends TurvoReceiverApplicationTests {
 
 	
 
@@ -49,7 +50,7 @@ public class TestDataReceiveService extends DataReceiverServiceApplicationTests 
 		dr.setDriverMobileNo(mno);
 		dr.setDriverName("sunil");
 		
-		driverRepository.save(dr);
+		Driver driver = driverRepository.save(dr);
 		
 		Vehicle v = new Vehicle();
 		v.setVehicleId(vehicleId);
@@ -57,26 +58,31 @@ public class TestDataReceiveService extends DataReceiverServiceApplicationTests 
 		
 		vehicleRepository.save(v);
 		
+		String vehicleDriver="{\n" + 
+				" \"vehicleId\":\""+vehicleId+"\",\n" + 
+				" \"driverId\":\""+driver.getDriverId()+"\"\n" + 
+				"}\n" + 
+				"";
+		
 		String exampleData= "{\n" + 
-				"	\n" + 
-				"	\"vehicle\":{\"vehicleId\":\""+vehicleId+"\"},\n" + 
-				"	\"driver\":{\"driverId\":100,\"driverMobileNo\":\""+mno+"\"},\n" + 
+				"	\"deviceType\":\"Mobile\",	\n" + 
+				"	\"id\":\""+mno+"\",\n" + 
 				"	\"latitude\":17.385044,\n" + 
 				"	\"longitude\":78.486671,\n" + 
 				"	\"currLocation\":\"KPHB\",\n" + 
 				"	\"speed\":45,\n" + 
-				"	\"currDateTime\":\"2018-01-05T04:33:35.280Z\",\n" + 
+				"	\"currDateTime\":\"2018-01-06T06:33:35.280Z\",\n" + 
 				"	\"additionalInfo\":\"XYZ\"\n" + 
 				"}";
 		
-		mockMvc.perform(post("/track/asset").content(exampleData).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 		
-		mockMvc.perform(post("/track/mobile").content(exampleData).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
-		mockMvc.perform(get("/track/getcalls/asset/"+vehicleId+"/20180104/20180106")).andExpect(status().isOk());
+		mockMvc.perform(post("/tracker/startTrip").content(vehicleDriver).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 		
-		mockMvc.perform(get("/track/getcalls/mobile/"+mno+"/20180104/20180106")).andExpect(status().isOk());
-
+		mockMvc.perform(post("/tracker/trackingInfo").content(exampleData).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+		
+		mockMvc.perform(get("/tracker/getAssets/"+mno+"/20180104/20180106").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+		
+		mockMvc.perform(put("/tracker/endTrip/5").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 	}
 
 }
